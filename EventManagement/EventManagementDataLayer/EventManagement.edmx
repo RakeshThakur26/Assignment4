@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="EventManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BookingStatus">
+          <Key>
+            <PropertyRef Name="booking_id" />
+          </Key>
+          <Property Name="booking_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="food_request" Type="bit" />
+          <Property Name="flower_request" Type="bit" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="status" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EventsTable">
+          <Key>
+            <PropertyRef Name="event_id" />
+          </Key>
+          <Property Name="event_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="event_type" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="guests" Type="int" Nullable="false" />
+          <Property Name="book_date" Type="date" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+        </EntityType>
+        <EntityType Name="FlowerOrder">
+          <Key>
+            <PropertyRef Name="flower_order_id" />
+          </Key>
+          <Property Name="flower_order_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="flower_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="flower_cost" Type="int" Nullable="false" />
+          <Property Name="event_id" Type="int" />
+          <Property Name="user_id" Type="int" />
+        </EntityType>
+        <EntityType Name="FoodOrder">
+          <Key>
+            <PropertyRef Name="food_order_id" />
+          </Key>
+          <Property Name="food_order_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="food_type" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="meal_type" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="dish_type" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="food_cost" Type="int" Nullable="false" />
+          <Property Name="event_id" Type="int" />
+          <Property Name="user_id" Type="int" />
+        </EntityType>
+        <EntityType Name="UsersTable">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="first_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="last_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="phone" Type="int" Nullable="false" />
+          <Property Name="address" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__BookingSt__user___1ED998B2">
+          <End Role="UsersTable" Type="Self.UsersTable" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BookingStatus" Type="Self.BookingStatus" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="BookingStatus">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EventsTab__user___145C0A3F">
+          <End Role="UsersTable" Type="Self.UsersTable" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="EventsTable" Type="Self.EventsTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="EventsTable">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FlowerOrd__event__1B0907CE">
+          <End Role="EventsTable" Type="Self.EventsTable" Multiplicity="0..1" />
+          <End Role="FlowerOrder" Type="Self.FlowerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventsTable">
+              <PropertyRef Name="event_id" />
+            </Principal>
+            <Dependent Role="FlowerOrder">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FlowerOrd__user___1BFD2C07">
+          <End Role="UsersTable" Type="Self.UsersTable" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FlowerOrder" Type="Self.FlowerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="FlowerOrder">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodOrder__event__173876EA">
+          <End Role="EventsTable" Type="Self.EventsTable" Multiplicity="0..1" />
+          <End Role="FoodOrder" Type="Self.FoodOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventsTable">
+              <PropertyRef Name="event_id" />
+            </Principal>
+            <Dependent Role="FoodOrder">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodOrder__user___182C9B23">
+          <End Role="UsersTable" Type="Self.UsersTable" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FoodOrder" Type="Self.FoodOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="FoodOrder">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EventManagementModelStoreContainer">
+          <EntitySet Name="Admin" EntityType="Self.Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookingStatus" EntityType="Self.BookingStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EventsTable" EntityType="Self.EventsTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FlowerOrder" EntityType="Self.FlowerOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FoodOrder" EntityType="Self.FoodOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsersTable" EntityType="Self.UsersTable" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__BookingSt__user___1ED998B2" Association="Self.FK__BookingSt__user___1ED998B2">
+            <End Role="UsersTable" EntitySet="UsersTable" />
+            <End Role="BookingStatus" EntitySet="BookingStatus" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EventsTab__user___145C0A3F" Association="Self.FK__EventsTab__user___145C0A3F">
+            <End Role="UsersTable" EntitySet="UsersTable" />
+            <End Role="EventsTable" EntitySet="EventsTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FlowerOrd__event__1B0907CE" Association="Self.FK__FlowerOrd__event__1B0907CE">
+            <End Role="EventsTable" EntitySet="EventsTable" />
+            <End Role="FlowerOrder" EntitySet="FlowerOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FlowerOrd__user___1BFD2C07" Association="Self.FK__FlowerOrd__user___1BFD2C07">
+            <End Role="UsersTable" EntitySet="UsersTable" />
+            <End Role="FlowerOrder" EntitySet="FlowerOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodOrder__event__173876EA" Association="Self.FK__FoodOrder__event__173876EA">
+            <End Role="EventsTable" EntitySet="EventsTable" />
+            <End Role="FoodOrder" EntitySet="FoodOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodOrder__user___182C9B23" Association="Self.FK__FoodOrder__user___182C9B23">
+            <End Role="UsersTable" EntitySet="UsersTable" />
+            <End Role="FoodOrder" EntitySet="FoodOrder" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EventManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Admin">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BookingStatu">
+          <Key>
+            <PropertyRef Name="booking_id" />
+          </Key>
+          <Property Name="booking_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="food_request" Type="Boolean" />
+          <Property Name="flower_request" Type="Boolean" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="UsersTable" Relationship="Self.FK__BookingSt__user___1ED998B2" FromRole="BookingStatus" ToRole="UsersTable" />
+        </EntityType>
+        <EntityType Name="EventsTable">
+          <Key>
+            <PropertyRef Name="event_id" />
+          </Key>
+          <Property Name="event_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="event_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="guests" Type="Int32" Nullable="false" />
+          <Property Name="book_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="user_id" Type="Int32" />
+          <NavigationProperty Name="UsersTable" Relationship="Self.FK__EventsTab__user___145C0A3F" FromRole="EventsTable" ToRole="UsersTable" />
+          <NavigationProperty Name="FlowerOrders" Relationship="Self.FK__FlowerOrd__event__1B0907CE" FromRole="EventsTable" ToRole="FlowerOrder" />
+          <NavigationProperty Name="FoodOrders" Relationship="Self.FK__FoodOrder__event__173876EA" FromRole="EventsTable" ToRole="FoodOrder" />
+        </EntityType>
+        <EntityType Name="FlowerOrder">
+          <Key>
+            <PropertyRef Name="flower_order_id" />
+          </Key>
+          <Property Name="flower_order_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="flower_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="flower_cost" Type="Int32" Nullable="false" />
+          <Property Name="event_id" Type="Int32" />
+          <Property Name="user_id" Type="Int32" />
+          <NavigationProperty Name="EventsTable" Relationship="Self.FK__FlowerOrd__event__1B0907CE" FromRole="FlowerOrder" ToRole="EventsTable" />
+          <NavigationProperty Name="UsersTable" Relationship="Self.FK__FlowerOrd__user___1BFD2C07" FromRole="FlowerOrder" ToRole="UsersTable" />
+        </EntityType>
+        <EntityType Name="FoodOrder">
+          <Key>
+            <PropertyRef Name="food_order_id" />
+          </Key>
+          <Property Name="food_order_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="food_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="meal_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="dish_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="food_cost" Type="Int32" Nullable="false" />
+          <Property Name="event_id" Type="Int32" />
+          <Property Name="user_id" Type="Int32" />
+          <NavigationProperty Name="EventsTable" Relationship="Self.FK__FoodOrder__event__173876EA" FromRole="FoodOrder" ToRole="EventsTable" />
+          <NavigationProperty Name="UsersTable" Relationship="Self.FK__FoodOrder__user___182C9B23" FromRole="FoodOrder" ToRole="UsersTable" />
+        </EntityType>
+        <EntityType Name="UsersTable">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="first_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="phone" Type="Int32" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="BookingStatus" Relationship="Self.FK__BookingSt__user___1ED998B2" FromRole="UsersTable" ToRole="BookingStatus" />
+          <NavigationProperty Name="EventsTables" Relationship="Self.FK__EventsTab__user___145C0A3F" FromRole="UsersTable" ToRole="EventsTable" />
+          <NavigationProperty Name="FlowerOrders" Relationship="Self.FK__FlowerOrd__user___1BFD2C07" FromRole="UsersTable" ToRole="FlowerOrder" />
+          <NavigationProperty Name="FoodOrders" Relationship="Self.FK__FoodOrder__user___182C9B23" FromRole="UsersTable" ToRole="FoodOrder" />
+        </EntityType>
+        <Association Name="FK__BookingSt__user___1ED998B2">
+          <End Role="UsersTable" Type="Self.UsersTable" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BookingStatus" Type="Self.BookingStatu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="BookingStatus">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__EventsTab__user___145C0A3F">
+          <End Role="UsersTable" Type="Self.UsersTable" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="EventsTable" Type="Self.EventsTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="EventsTable">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FlowerOrd__event__1B0907CE">
+          <End Role="EventsTable" Type="Self.EventsTable" Multiplicity="0..1" />
+          <End Role="FlowerOrder" Type="Self.FlowerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventsTable">
+              <PropertyRef Name="event_id" />
+            </Principal>
+            <Dependent Role="FlowerOrder">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodOrder__event__173876EA">
+          <End Role="EventsTable" Type="Self.EventsTable" Multiplicity="0..1" />
+          <End Role="FoodOrder" Type="Self.FoodOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EventsTable">
+              <PropertyRef Name="event_id" />
+            </Principal>
+            <Dependent Role="FoodOrder">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FlowerOrd__user___1BFD2C07">
+          <End Role="UsersTable" Type="Self.UsersTable" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FlowerOrder" Type="Self.FlowerOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="FlowerOrder">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodOrder__user___182C9B23">
+          <End Role="UsersTable" Type="Self.UsersTable" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FoodOrder" Type="Self.FoodOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsersTable">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="FoodOrder">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EventManagementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admins" EntityType="Self.Admin" />
+          <EntitySet Name="BookingStatus" EntityType="Self.BookingStatu" />
+          <EntitySet Name="EventsTables" EntityType="Self.EventsTable" />
+          <EntitySet Name="FlowerOrders" EntityType="Self.FlowerOrder" />
+          <EntitySet Name="FoodOrders" EntityType="Self.FoodOrder" />
+          <EntitySet Name="UsersTables" EntityType="Self.UsersTable" />
+          <AssociationSet Name="FK__BookingSt__user___1ED998B2" Association="Self.FK__BookingSt__user___1ED998B2">
+            <End Role="UsersTable" EntitySet="UsersTables" />
+            <End Role="BookingStatus" EntitySet="BookingStatus" />
+          </AssociationSet>
+          <AssociationSet Name="FK__EventsTab__user___145C0A3F" Association="Self.FK__EventsTab__user___145C0A3F">
+            <End Role="UsersTable" EntitySet="UsersTables" />
+            <End Role="EventsTable" EntitySet="EventsTables" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FlowerOrd__event__1B0907CE" Association="Self.FK__FlowerOrd__event__1B0907CE">
+            <End Role="EventsTable" EntitySet="EventsTables" />
+            <End Role="FlowerOrder" EntitySet="FlowerOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodOrder__event__173876EA" Association="Self.FK__FoodOrder__event__173876EA">
+            <End Role="EventsTable" EntitySet="EventsTables" />
+            <End Role="FoodOrder" EntitySet="FoodOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FlowerOrd__user___1BFD2C07" Association="Self.FK__FlowerOrd__user___1BFD2C07">
+            <End Role="UsersTable" EntitySet="UsersTables" />
+            <End Role="FlowerOrder" EntitySet="FlowerOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodOrder__user___182C9B23" Association="Self.FK__FoodOrder__user___182C9B23">
+            <End Role="UsersTable" EntitySet="UsersTables" />
+            <End Role="FoodOrder" EntitySet="FoodOrders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EventManagementModelStoreContainer" CdmEntityContainer="EventManagementEntities">
+          <EntitySetMapping Name="Admins">
+            <EntityTypeMapping TypeName="EventManagementModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="admin_id" ColumnName="admin_id" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BookingStatus">
+            <EntityTypeMapping TypeName="EventManagementModel.BookingStatu">
+              <MappingFragment StoreEntitySet="BookingStatus">
+                <ScalarProperty Name="booking_id" ColumnName="booking_id" />
+                <ScalarProperty Name="food_request" ColumnName="food_request" />
+                <ScalarProperty Name="flower_request" ColumnName="flower_request" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EventsTables">
+            <EntityTypeMapping TypeName="EventManagementModel.EventsTable">
+              <MappingFragment StoreEntitySet="EventsTable">
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="event_type" ColumnName="event_type" />
+                <ScalarProperty Name="guests" ColumnName="guests" />
+                <ScalarProperty Name="book_date" ColumnName="book_date" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FlowerOrders">
+            <EntityTypeMapping TypeName="EventManagementModel.FlowerOrder">
+              <MappingFragment StoreEntitySet="FlowerOrder">
+                <ScalarProperty Name="flower_order_id" ColumnName="flower_order_id" />
+                <ScalarProperty Name="flower_name" ColumnName="flower_name" />
+                <ScalarProperty Name="flower_cost" ColumnName="flower_cost" />
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FoodOrders">
+            <EntityTypeMapping TypeName="EventManagementModel.FoodOrder">
+              <MappingFragment StoreEntitySet="FoodOrder">
+                <ScalarProperty Name="food_order_id" ColumnName="food_order_id" />
+                <ScalarProperty Name="food_type" ColumnName="food_type" />
+                <ScalarProperty Name="meal_type" ColumnName="meal_type" />
+                <ScalarProperty Name="dish_type" ColumnName="dish_type" />
+                <ScalarProperty Name="food_cost" ColumnName="food_cost" />
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsersTables">
+            <EntityTypeMapping TypeName="EventManagementModel.UsersTable">
+              <MappingFragment StoreEntitySet="UsersTable">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="address" ColumnName="address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
